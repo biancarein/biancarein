@@ -1,3 +1,5 @@
+import java.sql.SQLOutput;
+
 /** Multidimensional array
  *  @author Zoe Plaxco
  */
@@ -14,7 +16,12 @@ public class MultiArr {
     Columns: 4
     */
     public static void printRowAndCol(int[][] arr) {
-        //TODO: Your code here!
+        System.out.println("Rows:" + arr.length);
+        int num_cols = 0;
+        for (int row = 0; row < arr.length; row++){
+            num_cols = Math.max(num_cols, arr[row].length);
+        }
+        System.out.println("Columns:" + num_cols);
     }
 
     /**
@@ -22,14 +29,26 @@ public class MultiArr {
     @return maximal value present anywhere in the 2d array
     */
     public static int maxValue(int[][] arr) {
-        //TODO: Your code here!
-        return 0;
+        int max_num = 0;
+        for (int row = 0; row < arr.length; row++){
+            for(int col=0; col < arr[row].length; col ++){
+                max_num = Math.max(max_num, arr[row][col]);
+            }
+        }
+        return max_num;
     }
 
     /**Return an array where each element is the sum of the
     corresponding row of the 2d array*/
     public static int[] allRowSums(int[][] arr) {
-        //TODO: Your code here!!
-        return null;
+        int[] sum_array = {};
+        for (int row = 0; row < arr.length; row++){
+            int sum_row = 0;
+            for(int col=0; col < arr[row].length; col ++){
+                sum_row += arr[row][col];
+            }
+            sum_array[row] += sum_row;
+        }
+        return sum_array;
     }
 }
