@@ -41,13 +41,13 @@ public class MultiArr {
     /**Return an array where each element is the sum of the
     corresponding row of the 2d array*/
     public static int[] allRowSums(int[][] arr) {
-        int[] sum_array = {};
+        int[] sum_array = new int[arr.length];
         for (int row = 0; row < arr.length; row++){
             int sum_row = 0;
             for(int col=0; col < arr[row].length; col ++){
                 sum_row += arr[row][col];
             }
-            sum_array[row] += sum_row;
+            sum_array[row] = sum_row;
         }
         return sum_array;
     }
