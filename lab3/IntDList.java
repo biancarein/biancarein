@@ -47,8 +47,17 @@ public class IntDList {
      * @return The number of elements in this list.
      */
     public int size() {
-        // TODO: Implement this method and return correct value
-        return 0;
+        int count = 0;
+        if (_front == null){
+            return count;
+        } else {
+            DNode curr_node = _front;
+            while (curr_node != null) {
+                count += 1;
+                curr_node = curr_node._next;
+            }
+            return count;
+        }
     }
 
     /**
@@ -60,8 +69,12 @@ public class IntDList {
      * @return The node at index index
      */
     private DNode getNode(int index) {
-        // TODO: Implement this method and return correct node
-        return null;
+        DNode curr_node = _front;
+        while (index > 0){
+            curr_node = curr_node._next;
+            index -= 1;
+        }
+        return curr_node;
     }
 
     /**
@@ -73,22 +86,37 @@ public class IntDList {
      * @return The integer value at index index
      */
     public int get(int index) {
-        // TODO: Implement this method (Hint: use `getNode`)
-        return 0;
+        return getNode(index)._val;
     }
 
     /**
      * @param d value to be inserted in the front
      */
     public void insertFront(int d) {
-        // TODO: Implement this method
+        DNode new_front = new DNode(d);
+        if (_front == null){
+            _back = new_front;
+            _front = new_front;
+        } else {
+            new_front._next = _front;
+            _front._prev = new_front;
+            _front = new_front;
+        }
     }
 
     /**
      * @param d value to be inserted in the back
      */
     public void insertBack(int d) {
-        // TODO: Implement this method
+        DNode new_back = new DNode(d);
+        if(_back == null){
+            _front = new_back;
+            _back = new_back;
+        } else {
+            _back._next = new_back;
+            new_back._prev = _back;
+            _back = new_back;
+        }
     }
 
     /**
@@ -100,7 +128,29 @@ public class IntDList {
      *              i.e 0 <= index <= size.
      */
     public void insertAtIndex(int d, int index) {
-        // TODO: Implement this method
+        DNode new_node = new DNode(d);
+        if (size()== 0){
+            _front = new_node;
+            _back = new_node;
+        } else {
+            if(index == size()){
+                DNode previous = getNode(index - 1);
+                new_node._prev = previous;
+                new_node._next = null;
+                previous._next = new_node;
+                _back = new_node;
+            } else {
+                DNode curr_node = getNode(index);
+                new_node._prev = curr_node._prev;
+                new_node._next = curr_node;
+                if (index == 0) {
+                    _front = new_node;
+                } else {
+                    curr_node._prev._next = new_node;
+                    curr_node._prev = new_node;
+                }
+            }
+        }
     }
 
     /**
@@ -110,8 +160,16 @@ public class IntDList {
      * @return the item that was deleted
      */
     public int deleteFront() {
-        // TODO: Implement this method and return correct value
-        return 0;
+        int old_front = getFront();
+        if (size() == 1){
+            _front = null;
+            _back = null;
+            return old_front;
+        } else{
+            _front._next._prev = null;
+            _front = _front._next;
+           return old_front;
+        }
     }
 
     /**
@@ -121,8 +179,16 @@ public class IntDList {
      * @return the item that was deleted
      */
     public int deleteBack() {
-        // TODO: Implement this method and return correct value
-        return 0;
+        int old_back = getBack();
+        if (size() == 1){
+            _front = null;
+            _back = null;
+            return old_back;
+        }else{
+            _back._prev._next = null;
+            _back = _back._prev;
+            return old_back;
+        }
     }
 
     /**
@@ -147,8 +213,16 @@ public class IntDList {
      * System.out.println(a); //prints ab
      */
     public String toString() {
-        // TODO: Implement this method to return correct value
-        return null;
+        if (size() == 0) {
+            return "[]";
+        }
+        String str = "[";
+        DNode curr = _front;
+        for (; curr._next != null; curr = curr._next) {
+            str += curr._val + ", ";
+        }
+        str += curr._val +"]";
+        return str;
     }
 
     /**
