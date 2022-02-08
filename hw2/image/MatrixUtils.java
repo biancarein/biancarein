@@ -98,8 +98,7 @@ public class MatrixUtils {
         if (orientation == Orientation.VERTICAL){
             return accumulateVertical(m);
         } else {
-            double[][] vertical_m = accumulateVertical(m);
-            return transpose(vertical_m);
+            return accumulateVertical(transpose(m));
         }
     }
 
