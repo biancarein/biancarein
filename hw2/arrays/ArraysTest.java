@@ -22,9 +22,18 @@ public class ArraysTest {
 
     @Test
     public void removeTest(){
-        int[] input_arr = new int[]{1,2,3,4};
-        int[] exp_arr = new int[]{1,2,4};
-        assertArrayEquals(exp_arr, Arrays.remove(input_arr, 2, 1));
+        int[] input_arr = new int[]{1,2,3,4,5};
+        int[] exp_arr = new int[]{1,2,5};
+        assertArrayEquals(exp_arr, Arrays.remove(input_arr, 2, 2));
+        int[] exp_arr2 = new int[]{1};
+        assertArrayEquals(exp_arr2, Arrays.remove(input_arr, 1, 4));
+        int[] exp_arr3 = new int[]{};
+        assertArrayEquals(exp_arr3, Arrays.remove(input_arr, 0, 5));
+
+        int[] input2 = new int[]{6,7};
+        int[] expected = new int[]{};
+        assertArrayEquals(expected, Arrays.remove(input2, 0, 2));
+
     }
 
     public static void main(String[] args) {

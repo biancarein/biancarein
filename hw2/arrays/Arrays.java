@@ -30,9 +30,16 @@ class Arrays {
      *  result should be [0, 3]. */
     static int[] remove(int[] A, int start, int len) {
         int[] return_array = new int[A.length - len];
-        arraycopy(A, 0, return_array, 0, start);
-        arraycopy(A, start + len , return_array,start, len );
-        return return_array;
+        if (return_array.length == 0){
+            return new int[]{};
+        }else if(return_array.length == 1){
+            arraycopy(A, 0, return_array, 0, start);
+            return return_array;
+        } else {
+            arraycopy(A, 0, return_array, 0, start);
+            arraycopy(A, start + len, return_array, start, len - 1);
+            return return_array;
+        }
     }
 
 }
