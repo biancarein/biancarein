@@ -11,12 +11,16 @@ public class MatrixUtilsTest {
 
     @Test
     public void accumulateVerticalTest(){
-
+        MatrixUtils.accumulateVertical(new double[][] {{10, 4, 5, 6}, {3, 10, 18, 6}, {8, 5, 19, 6}});
     }
 
     @Test
     public void accumulateTest(){
+        double[][] input_a = new double[][]{{10, 4, 5}, {3, 10, 18}, {8, 5, 19}};
+        double[][] exp_ar = new double[][]{{10, 7, 5}, {3, 10, 18}, {8, 5, 19}};
+        assertArrayEquals(exp_ar,MatrixUtils.accumulate(input_a, MatrixUtils.Orientation.HORIZONTAL));
 
+        MatrixUtils.accumulate(new double[][] {{10, 4, 5, 6}, {3, 10, 18, 6}, {8, 5, 19, 6}}, MatrixUtils.Orientation.HORIZONTAL);
     }
 
     @Test
