@@ -104,7 +104,7 @@ public class MatrixUtils {
 
     /* returns the transpose of m */
     public static double[][] transpose(double[][] m){
-        double[][] transposed = new double[][]{};
+        double[][] transposed = new double[m.length][m.length];
         for (int i = 0; i < m.length; i ++) {
             for (int j = 0; j < m[i].length; j++) {
                 transposed[i][j] = m[j][i];
