@@ -95,7 +95,23 @@ public class MatrixUtils {
      */
 
     public static double[][] accumulate(double[][] m, Orientation orientation) {
-        return null; //your code here
+        if (orientation == Orientation.VERTICAL){
+            return accumulateVertical(m);
+        } else {
+            double[][] vertical_m = accumulateVertical(m);
+            return transpose(vertical_m);
+        }
+    }
+
+    /* returns the transpose of m */
+    public static double[][] transpose(double[][] m){
+        double[][] transposed = new double[][]{};
+        for (int i = 0; i < m.length; i ++) {
+            for (int j = 0; j < m[i].length; j++) {
+                transposed[i][j] = m[j][i];
+            }
+        }
+        return transposed;
     }
 
     /** Gets entry of M, unless R or C are out of bounds, then
