@@ -8,8 +8,16 @@ import static org.junit.Assert.*;
  */
 
 public class MatrixUtilsTest {
-    /** FIXME
-     */
+
+    @Test
+    public void accumulateVerticalTest(){
+
+    }
+
+    @Test
+    public void accumulateTest(){
+
+    }
 
     public static void main(String[] args) {
         System.exit(ucb.junit.textui.runClasses(MatrixUtilsTest.class));

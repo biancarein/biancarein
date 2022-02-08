@@ -10,7 +10,7 @@ import image.In;
 /** List problem.
  *  @author
  */
-class Lists {
+public class Lists {
 
 
     /* B. */
@@ -31,9 +31,12 @@ class Lists {
         result.head = L;
         while (L.tail != null) {
             if (L.head > L.tail.head) {
-                // FIXME: Do something
+                result.tail = new IntListList(L.tail, null);
+                result = result.tail;
+                L.tail = null;
+                L = result.head;
             } else {
-                // FIXME: Do something else
+                L = L.tail;
             }
         }
         return resultPointer;

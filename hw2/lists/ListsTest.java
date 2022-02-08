@@ -3,9 +3,9 @@ package lists;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/** FIXME
+/** IntList tests
  *
- *  @author FIXME
+ *  @author Bianca Del Rosario
  */
 
 public class ListsTest {
@@ -16,10 +16,19 @@ public class ListsTest {
         IntList run1 = IntList.list(1, 2, 3);
         IntList run2 = IntList.list(1, 2);
         IntListList result = IntListList.list(run1, run2);
-        //FIXME: Add some assertion to make this a real test.
+        assertEquals(result, Lists.naturalRuns(input));
     }
 
-    //FIXME: Add more tests!
+    @Test
+    public void multipleRunsTest() {
+        IntList input1 = IntList.list(1, 2, 3, 2, 1);
+        IntList run1 = IntList.list(1, 2, 3);
+        IntList run2 = IntList.list(2);
+        IntList run3 = IntList.list(1);
+        IntListList result1 = IntListList.list(run1, run2, run3);
+        assertEquals(result1, Lists.naturalRuns(input1));
+    }
+
 
     public static void main(String[] args) {
         System.exit(ucb.junit.textui.runClasses(ListsTest.class));
