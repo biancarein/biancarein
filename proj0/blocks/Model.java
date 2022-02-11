@@ -1,6 +1,5 @@
 package blocks;
 
-import net.sf.saxon.functions.ConstantFunction;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -17,7 +16,7 @@ import static blocks.Utils.*;
  *  determining whether a puzzle piece may be added at a given position or
  *  anywhere, and undoing or redoing moves.
  *
- *  @author
+ *  @author Bianca Del Rosario
  */
 class Model {
 
@@ -85,12 +84,12 @@ class Model {
         if (piece == null) {
             return false;
         }
-        if (piece.height() > _height || piece.width() > _width){
+        if (piece.height() > _height || piece.width() > _width) {
             return false;
         }
-        for (int r = 0; r < piece.height(); r++){
-            for(int c = 0; c < piece.width(); c++){
-                if (get(row + r, col + c) == true && piece.get(r, c) == true){
+        for (int r = 0; r < piece.height(); r++) {
+            for (int c = 0; c < piece.width(); c++) {
+                if (get(row + r, col + c) && piece.get(r, c)) {
                     return false;
                 }
             }
@@ -100,9 +99,9 @@ class Model {
 
     /** Return true iff PIECE may be added to the board at some position. */
     boolean placeable(Piece piece) {
-        for(int row = 0; row < _height; row++){
-            for(int col = 0; col < _width; col++ ){
-                if(placeable(piece, row, col) == true){
+        for (int row = 0; row < _height; row++) {
+            for (int col = 0; col < _width; col++) {
+                if (placeable(piece, row, col)) {
                     return true;
                 }
             }
@@ -125,11 +124,11 @@ class Model {
      *  there. Also updates score(). */
     void place(Piece piece, int row, int col) {
         assert placeable(piece, row, col);
-        for(int w = 0; w < piece.width(); w++){
-            for(int h = 0; h < piece.height(); h++){
-                if (piece.get(h, w) == true){
-                    _cells[row+h][col+w] = true;
-                    _score ++;
+        for (int w = 0; w < piece.width(); w++) {
+            for (int h = 0; h < piece.height(); h++) {
+                if (piece.get(h, w)) {
+                    _cells[row + h][col + w] = true;
+                    _score++;
                 }
             }
         }
@@ -148,9 +147,9 @@ class Model {
      *  filled grid cells in column c. */
     int[][] rowColumnCounts() {
         int[][] result = new int[][] { new int[_height], new int[_width] };
-        for (int r = 0; r < _height; r++){
-            for (int c = 0; c < _width; c++){
-                if (get(r, c)){
+        for (int r = 0; r < _height; r++) {
+            for (int c = 0; c < _width; c++) {
+                if (get(r, c)) {
                     result[0][r] += 1;
                     result[1][c] += 1;
                 }
@@ -165,25 +164,25 @@ class Model {
         int nrows, ncols;
         int[][] counts = rowColumnCounts();
         nrows = ncols = 0;
-        for(int r = 0; r < _height; r ++){
-            if(counts[0][r] == _width){
+        for (int r = 0; r < _height; r++) {
+            if (counts[0][r] == _width) {
                 nrows += 1;
-                for(int w = 0; w < _width; w++){
-                        _cells[r][w] = false;
+                for (int w = 0; w < _width; w++) {
+                    _cells[r][w] = false;
                 }
             }
         }
-        for(int c = 0; c < _width; c++){
-            if(counts[1][c] == _height){
+        for (int c = 0; c < _width; c++) {
+            if (counts[1][c] == _height) {
                 ncols += 1;
-                for (int h = 0; h < height(); h++){
+                for (int h = 0; h < height(); h++) {
                     _cells[h][c] = false;
                 }
             }
         }
-        if(nrows > 0 || ncols > 0){
+        if (nrows > 0 || ncols > 0) {
             _streakLength += 1;
-        } else if (nrows == 0 && ncols == 0){
+        } else if (nrows == 0 && ncols == 0) {
             _streakLength = 0;
         }
         _score += scoreClearedLines(nrows, ncols);
@@ -193,20 +192,20 @@ class Model {
      *  NROWS is the number of rows cleared and NCOLS is the number
      *  of columns cleared. */
     private int scoreClearedLines(int nrows, int ncols) {
-        int num_cleared = (nrows * _width) + (ncols * _height);
+        int numCleared = (nrows * _width) + (ncols * _height);
         int intersections = (nrows * ncols);
-        int bonus = _streakLength * (num_cleared);
-        return num_cleared - intersections + bonus;
+        int bonus = _streakLength * (numCleared);
+        return numCleared - intersections + bonus;
     }
 
     /** Return true iff the current hand is empty (i.e., piece(k) is null
      *  for all k). */
     boolean handUsed() {
-        if (handSize() == 0){
+        if (handSize() == 0) {
             return true;
         }
-        for(int k = 0; k < handSize(); k++){
-            if(_hand.get(k) != null){
+        for (int k = 0; k < handSize(); k++) {
+            if (_hand.get(k) != null) {
                 return false;
             }
         }
@@ -259,11 +258,11 @@ class Model {
     /** Returns true if this puzzle round is over because the hand is not empty
      *  but contains only Pieces that cannot be placed.  */
     boolean roundOver() {
-        if(handUsed()){
+        if (handUsed()) {
             return false;
         }
-        for(int k = 0; k < handSize(); k++){
-            if(placeable(piece(k))){
+        for (int k = 0; k < handSize(); k++) {
+            if (placeable(piece(k))) {
                 return false;
             }
         }
@@ -279,11 +278,10 @@ class Model {
      *  or is currently filled.   That is, it returns true iff one may not
      *  add a Piece that would fill location (ROW, COL). */
     boolean get(int row, int col) {
-        if (isCell(row, col) == false || _cells[row][col] == true){
+        if (!isCell(row, col) || _cells[row][col]) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override
