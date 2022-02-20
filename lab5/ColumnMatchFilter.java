@@ -1,3 +1,5 @@
+import java.util.Iterator;
+
 /**
  * TableFilter to filter for entries whose two columns match.
  *
@@ -7,14 +9,24 @@ public class ColumnMatchFilter extends TableFilter {
 
     public ColumnMatchFilter(Table input, String colName1, String colName2) {
         super(input);
-        // FIXME: Add your code here.
+        _colName1 = colName1;
+        _colName2 = colName2;
+        _indexCol1 = input.colNameToIndex(colName1);
+        _indexCol2 = input.colNameToIndex(colName2);
+
     }
 
     @Override
     protected boolean keep() {
-        // FIXME: Replace this line with your code.
+        if (candidateNext().getValue(_indexCol1).equals(candidateNext().getValue(_indexCol2))) {
+            return true;
+        }
         return false;
     }
 
-    // FIXME: Add instance variables?
+    public String _colName1;
+    public String _colName2;
+    public int _indexCol1;
+    public int _indexCol2;
+
 }
