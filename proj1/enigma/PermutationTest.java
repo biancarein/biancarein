@@ -51,4 +51,38 @@ public class PermutationTest {
         checkPerm("identity", UPPER_STRING, UPPER_STRING);
     }
 
+    @Test
+    public void testPermutation() {
+        System.out.println(UPPER);
+        Permutation testPerm = new Permutation("(ACG)", UPPER);
+        assertEquals(26, testPerm.size());
+
+        assertEquals(2, testPerm.permute(0));
+        assertEquals(6, testPerm.permute(2));
+        assertEquals(0, testPerm.permute(6));
+
+        assertEquals(6, testPerm.invert(0));
+        assertEquals(0, testPerm.invert(2));
+        assertEquals(2, testPerm.invert(6));
+
+        assertEquals('C', testPerm.permute('A'));
+        assertEquals('G', testPerm.permute('C'));
+        assertEquals('A', testPerm.permute('G'));
+
+        assertEquals('G', testPerm.invert('A'));
+        assertEquals('A', testPerm.invert('C'));
+        assertEquals('C', testPerm.invert('G'));
+
+        assertFalse(testPerm.derangement());
+
+        Alphabet nums = new Alphabet("12345");
+        Permutation testPerm2 = new Permutation("(135)", nums);
+        assertEquals(5, testPerm2.size());
+
+        assertEquals(2, testPerm2.permute(0));
+        assertEquals(4, testPerm2.permute(2));
+        assertEquals(0, testPerm2.permute(4));
+
+    }
+
 }

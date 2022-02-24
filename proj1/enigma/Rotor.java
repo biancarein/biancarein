@@ -46,17 +46,17 @@ class Rotor {
 
     /** Return my current setting. */
     int setting() {
-        return 0; // FIXME
+        return _setting;
     }
 
     /** Set setting() to POSN.  */
     void set(int posn) {
-        // FIXME
+        _setting = posn;
     }
 
     /** Set setting() to character CPOSN. */
     void set(char cposn) {
-        // FIXME
+        _setting = alphabet().toInt(cposn);
     }
 
     /** Return the conversion of P (an integer in the range 0..size()-1)
@@ -105,6 +105,9 @@ class Rotor {
 
     /** The permutation implemented by this rotor in its 0 position. */
     private Permutation _permutation;
+
+    /** My Setting.*/
+    public int _setting;
 
     // FIXME: ADDITIONAL FIELDS HERE, AS NEEDED
 
