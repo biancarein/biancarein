@@ -1,5 +1,7 @@
 package enigma;
 
+import static enigma.EnigmaException.*;
+
 /** An alphabet of encodable characters.  Provides a mapping from characters
  *  to and from indices into the alphabet.
  *  @author
@@ -10,6 +12,13 @@ class Alphabet {
      *  K (numbering from 0). No character may be duplicated. */
     Alphabet(String chars) {
         _chars = chars;
+        for (int i = 0; i < size(); i++) {
+            for (int j = i + 1; j < size(); j++) {
+                if(_chars.charAt(i) == _chars.charAt(j)) {
+                    throw error( "A character is duplicated in alphabet");
+                }
+            }
+        }
     }
 
     /** A default alphabet of all upper-case characters. */

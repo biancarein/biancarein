@@ -85,4 +85,153 @@ public class PermutationTest {
 
     }
 
+    @Test
+    public void testInvertChar() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BACD)", a1);
+        assertEquals('B', p.invert('A'));
+        assertEquals('D', p.invert('B'));
+        assertEquals('A', p.invert('C'));
+        assertEquals('C', p.invert('D'));
+
+        Alphabet a2 = new Alphabet("S");
+        Permutation one = new Permutation("(S)", a2);
+        assertEquals('S', one.invert('S'));
+
+        Alphabet a3 = new Alphabet("AB");
+        Permutation two = new Permutation("(BA)", a3);
+        assertEquals( 'B', two.invert('A'));
+        assertEquals( 'A', two.invert('B'));
+    }
+
+    @Test
+    public void testSize() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BACD)", a1);
+        assertEquals(4, p.size());
+
+        Alphabet a2 = new Alphabet("S");
+        Permutation one = new Permutation("(S)", a2);
+        assertEquals(1, one.size());
+    }
+
+
+    @Test
+    public void testPermuteChar() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BACD)", a1);
+        assertEquals( 'C', p.permute('A'));
+        assertEquals('A', p.permute('B'));
+        assertEquals('D', p.permute('C'));
+        assertEquals('B', p.permute('D'));
+
+        Alphabet a2 = new Alphabet("B");
+        Permutation single = new Permutation("(B)", a2);
+        assertEquals( 'B', single.permute('B'));
+
+        Alphabet a3 = new Alphabet("AB");
+        Permutation two = new Permutation("(BA)", a3);
+        assertEquals( 'B', two.permute('A'));
+        assertEquals( 'A', two.permute('B'));
+
+    }
+
+    @Test
+    public void testPermuteInt() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BACD)", a1);
+        assertEquals( 2, p.permute(0));
+        assertEquals(0, p.permute(1));
+        assertEquals(3, p.permute(2));
+        assertEquals(1, p.permute(3));
+
+        Alphabet a2 = new Alphabet("B");
+        Permutation single = new Permutation("(B)", a2);
+        assertEquals( 0, single.permute(0));
+
+        Alphabet a3 = new Alphabet("AB");
+        Permutation two = new Permutation("(BA)", a3);
+        assertEquals( 1, two.permute(0));
+        assertEquals( 0, two.permute(1));
+    }
+
+    @Test
+    public void testInvertInt() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BACD)", a1);
+        assertEquals( 1, p.invert(0));
+        assertEquals(3, p.invert(1));
+        assertEquals(0, p.invert(2));
+        assertEquals(2, p.invert(3));
+
+        Alphabet a2 = new Alphabet("B");
+        Permutation single = new Permutation("(B)", a2);
+        assertEquals( 0, single.invert(0));
+
+        Alphabet a3 = new Alphabet("AB");
+        Permutation two = new Permutation("(BA)", a3);
+        assertEquals( 1, two.invert(0));
+        assertEquals( 0, two.invert(1));
+    }
+
+    @Test(expected = EnigmaException.class)
+    public void testRepeatLetters() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BBACD)", a1);
+        p.invert(1);
+        p.invert('B');
+        p.permute(1);
+        p.permute('B');
+
+        Alphabet a2 = new Alphabet("ABBCD");
+        Permutation q = new Permutation("(BACD)", a2);
+        q.invert(0);
+        q.invert('A');
+        q.permute(1);
+        q.permute('B');
+
+        Permutation r = new Permutation("(BA) (BCD)", a1);
+        r.invert(1);
+        r.invert('B');
+        r.permute(1);
+        r.permute('B');
+    }
+
+    @Test(expected = EnigmaException.class)
+    public void testWhiteSpace() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BA CD)", a1);
+        p.invert(2);
+        p.invert('C');
+        p.permute(0);
+        p.permute('A');
+
+        Alphabet a2 = new Alphabet("A BCD");
+        Permutation q = new Permutation("(BACD)", a2);
+        q.invert(1);
+        q.permute(1);
+        q.invert(' ');
+        q.permute(' ');
+
+    }
+
+    @Test
+    public void testDerangement() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BACD)", a1);
+        assertTrue(p.derangement());
+
+        Permutation q = new Permutation("(BAC) (D)", a1);
+        assertFalse(q.derangement());
+    }
+
+    @Test(expected = EnigmaException.class)
+    public void testNotInAlphabet() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(BACD)", a1);
+        p.invert('F');
+        p.invert(4);
+        p.permute(4);
+        p.permute('F');
+    }
 }

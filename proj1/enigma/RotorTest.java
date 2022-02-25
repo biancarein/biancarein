@@ -15,4 +15,10 @@ import static enigma.TestUtils.*;
  */
 
 public class RotorTest {
+
+    @Test
+    public void testRotor() {
+        Permutation p = new Permutation("(BACD)", UPPER);
+        Rotor r = new Rotor("I", p);
+    }
 }
