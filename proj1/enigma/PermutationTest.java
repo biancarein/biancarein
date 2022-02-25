@@ -197,24 +197,6 @@ public class PermutationTest {
         r.permute('B');
     }
 
-    @Test(expected = EnigmaException.class)
-    public void testWhiteSpace() {
-        Alphabet a1 = new Alphabet("ABCD");
-        Permutation p = new Permutation("(BA CD)", a1);
-        p.invert(2);
-        p.invert('C');
-        p.permute(0);
-        p.permute('A');
-
-        Alphabet a2 = new Alphabet("A BCD");
-        Permutation q = new Permutation("(BACD)", a2);
-        q.invert(1);
-        q.permute(1);
-        q.invert(' ');
-        q.permute(' ');
-
-    }
-
     @Test
     public void testDerangement() {
         Alphabet a1 = new Alphabet("ABCD");

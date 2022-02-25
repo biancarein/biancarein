@@ -11,7 +11,6 @@ class Rotor {
     Rotor(String name, Permutation perm) {
         _name = name;
         _permutation = perm;
-        _setting = alphabet().toChar(0);
     }
 
     /** Return my name. */
@@ -62,7 +61,8 @@ class Rotor {
     /** Return the conversion of P (an integer in the range 0..size()-1)
      *  according to my permutation. */
     int convertForward(int p) {
-        int result = _permutation.permute(p);
+        int input = _permutation.permute((p + setting()) % alphabet().size());
+        int result = _permutation.wrap((input - setting()) % alphabet().size());
         if (Main.verbose()) {
             System.err.printf("%c -> ", alphabet().toChar(result));
         }
@@ -72,7 +72,8 @@ class Rotor {
     /** Return the conversion of E (an integer in the range 0..size()-1)
      *  according to the inverse of my permutation. */
     int convertBackward(int e) {
-        int result = _permutation.invert(e);
+        int input = _permutation.invert((e + setting()) % alphabet().size());
+        int result = _permutation.wrap((input - setting()) % alphabet().size());
         if (Main.verbose()) {
             System.err.printf("%c -> ", alphabet().toChar(result));
         }
@@ -88,10 +89,13 @@ class Rotor {
     /** Returns true iff I am positioned to allow the rotor to my left
      *  to advance. */
     boolean atNotch() {
-        //return true if the setting is equal to the notch label
-        // otherwise return false
-        if (notches().equals(alphabet().toChar(_setting))) {
+        if (notches().equals("")) {
             return true;
+        }
+        for (int i = 0; i < notches().length(); i++) {
+            if (notches().equals(alphabet().toChar(_setting))){
+                return true;
+            }
         }
         return false;
     }

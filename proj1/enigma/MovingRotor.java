@@ -16,13 +16,15 @@ class MovingRotor extends Rotor {
         super(name, perm);
         _notches = notches;
     }
+    @Override
+    boolean rotates() {
+        return true;
+    }
 
     @Override
     void advance() {
-        for (int i = 0; i < notches().length(); i ++) {
-            if (notches().charAt(i) == alphabet().toChar(_setting)){
-                _setting += 1;
-            }
+        if(atNotch()) {
+            _setting += 1;
         }
     }
 
@@ -31,7 +33,6 @@ class MovingRotor extends Rotor {
         return _notches;
     }
 
-    // FIXME: ADDITIONAL FIELDS HERE, AS NEEDED
     /** A String of my notches. */
     public String _notches;
 
