@@ -2,6 +2,7 @@ package enigma;
 
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.Iterator;
 
 import static enigma.EnigmaException.*;
 
@@ -16,24 +17,39 @@ class Machine {
     Machine(Alphabet alpha, int numRotors, int pawls,
             Collection<Rotor> allRotors) {
         _alphabet = alpha;
-        // FIXME
+        _numRotors = numRotors;
+        _pawls = pawls;
+        _allRotors = allRotors;
+        _CopyAllRotors = allRotors;
+        if (numRotors < 0) {
+            throw error("Error: Number of rotors cannot be less than 0.");
+        }
+        if (pawls < 0) {
+            throw  error("Error: Number of pawls cannot be less than 0.");
+        }
     }
 
     /** Return the number of rotor slots I have. */
     int numRotors() {
-        return 0; // FIXME
+        return  _numRotors;
     }
 
     /** Return the number pawls (and thus rotating rotors) I have. */
     int numPawls() {
-        return 0; // FIXME
+        return _pawls;
     }
 
     /** Return Rotor #K, where Rotor #0 is the reflector, and Rotor
      *  #(numRotors()-1) is the fast Rotor.  Modifying this Rotor has
      *  undefined results. */
     Rotor getRotor(int k) {
-        return null; // FIXME
+        _CopyAllRotors = _allRotors;
+        for (int i = 0; i <= k; i++){
+            if(_CopyAllRotors.iterator().hasNext()) {
+                _CopyAllRotors.iterator().next();
+            }
+        }
+        return _CopyAllRotors.iterator().next();
     }
 
     Alphabet alphabet() {
@@ -44,7 +60,13 @@ class Machine {
      *  available rotors (ROTORS[0] names the reflector).
      *  Initially, all rotors are set at their 0 setting. */
     void insertRotors(String[] rotors) {
-        // FIXME
+        //for loop through the iterator
+        // rotors.charat(i)
+        // add the string index to the rotor array
+        _CopyAllRotors = _allRotors;
+        for (int i = 0; i < numRotors(); i++) {
+            _allRotors.iterator().next();
+        }
     }
 
     /** Set my rotors according to SETTING, which must be a string of
@@ -109,5 +131,18 @@ class Machine {
     /** Common alphabet of my rotors. */
     private final Alphabet _alphabet;
 
-    // FIXME: ADDITIONAL FIELDS HERE, IF NEEDED.
+    /** Number of Rotors. */
+    public int _numRotors;
+
+    /** Number of Pawls. */
+    public int _pawls;
+
+    /** Collection of all Rotors. */
+    public Collection<Rotor> _allRotors;
+
+    /** Copy Collection of all Rotors. */
+    public Collection<Rotor> _CopyAllRotors;
+
+    /** Array List of all Rotors that will be used/inserted. */
+    public String[] _StringAllRotors;
 }

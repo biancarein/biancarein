@@ -23,9 +23,7 @@ class MovingRotor extends Rotor {
 
     @Override
     void advance() {
-        if(atNotch()) {
-            _setting += 1;
-        }
+        _setting += 1;
     }
 
     @Override
