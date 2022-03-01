@@ -90,11 +90,6 @@ class Rotor {
     /** Returns true iff I am positioned to allow the rotor to my left
      *  to advance. */
     boolean atNotch() {
-        for (int i = 0; i < notches().length(); i++) {
-            if (notches().charAt(i) == alphabet().toChar(setting())){
-                return true;
-            }
-        }
         return false;
     }
 

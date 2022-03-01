@@ -7,7 +7,7 @@ import java.util.Iterator;
 import static enigma.EnigmaException.*;
 
 /** Class that represents a complete enigma machine.
- *  @author
+ *  @author Bianca Rein Del Rosario
  */
 class Machine {
 
@@ -21,6 +21,7 @@ class Machine {
         _pawls = pawls;
         _allRotors = allRotors;
         _CopyAllRotors = allRotors;
+        _UsedRotors = new String[numRotors];
         if (numRotors < 0) {
             throw error("Error: Number of rotors cannot be less than 0.");
         }
@@ -44,12 +45,13 @@ class Machine {
      *  undefined results. */
     Rotor getRotor(int k) {
         _CopyAllRotors = _allRotors;
-        for (int i = 0; i <= k; i++){
-            if(_CopyAllRotors.iterator().hasNext()) {
-                _CopyAllRotors.iterator().next();
+        Rotor curr = _CopyAllRotors.iterator().next();
+        for(Rotor rotor: _CopyAllRotors) {
+            if (_UsedRotors[k] == rotor.name()) {
+                curr = rotor;
             }
         }
-        return _CopyAllRotors.iterator().next();
+        return curr;
     }
 
     Alphabet alphabet() {
@@ -60,12 +62,13 @@ class Machine {
      *  available rotors (ROTORS[0] names the reflector).
      *  Initially, all rotors are set at their 0 setting. */
     void insertRotors(String[] rotors) {
-        //for loop through the iterator
-        // rotors.charat(i)
-        // add the string index to the rotor array
         _CopyAllRotors = _allRotors;
-        for (int i = 0; i < numRotors(); i++) {
-            _allRotors.iterator().next();
+        for (int i = 0; i < _UsedRotors.length; i++) {
+            for(Rotor rotor: _CopyAllRotors) {
+                if(rotor.name() == rotors[i]){
+                    _UsedRotors[i] = rotors[i];
+                }
+            }
         }
     }
 
@@ -73,17 +76,19 @@ class Machine {
      *  numRotors()-1 characters in my alphabet. The first letter refers
      *  to the leftmost rotor setting (not counting the reflector).  */
     void setRotors(String setting) {
-        // FIXME
+        for (int i = 1; i < _UsedRotors.length - 1; i++) {
+            getRotor(i).set(setting.charAt(i));
+        }
     }
 
     /** Return the current plugboard's permutation. */
     Permutation plugboard() {
-        return null; // FIXME
+        return _plugboard;
     }
 
     /** Set the plugboard to PLUGBOARD. */
     void setPlugboard(Permutation plugboard) {
-        // FIXME
+        _plugboard = plugboard;
     }
 
     /** Returns the result of converting the input character C (as an
@@ -113,18 +118,32 @@ class Machine {
 
     /** Advance all rotors to their next position. */
     private void advanceRotors() {
-        // FIXME
+        for (int i = 0; i < _UsedRotors.length; i++) {
+            if (getRotor(i).atNotch()){
+                getRotor(i).advance();
+            }
+        }
     }
 
     /** Return the result of applying the rotors to the character C (as an
      *  index in the range 0..alphabet size - 1). */
     private int applyRotors(int c) {
-        return c; // FIXME
+        advanceRotors();
+        int result = c;
+        for(int i = 0; i < _UsedRotors.length; i++) {
+            result = getRotor(i).convertForward(result);
+        }
+        for(int i = 0; i < _UsedRotors.length; i++) {
+            result = getRotor(i).convertBackward(result);
+        }
+        return result;
     }
 
     /** Returns the encoding/decoding of MSG, updating the state of
      *  the rotors accordingly. */
     String convert(String msg) {
+        // char at msg
+        // convert the char
         return ""; // FIXME
     }
 
@@ -144,5 +163,8 @@ class Machine {
     public Collection<Rotor> _CopyAllRotors;
 
     /** Array List of all Rotors that will be used/inserted. */
-    public String[] _StringAllRotors;
+    public String[] _UsedRotors;
+
+    /** Plugboard permutation */
+    public Permutation _plugboard;
 }
