@@ -1,8 +1,6 @@
 package enigma;
 
-import java.util.HashMap;
 import java.util.Collection;
-import java.util.Iterator;
 
 import static enigma.EnigmaException.*;
 
@@ -77,8 +75,8 @@ class Machine {
      *  numRotors()-1 characters in my alphabet. The first letter refers
      *  to the leftmost rotor setting (not counting the reflector).  */
     void setRotors(String setting) {
-        for (int i = 1; i < _UsedRotors.length - 1; i++) {
-            getRotor(i).set(setting.charAt(i));
+        for (int i = 1; i <= _UsedRotors.length - 1; i++) {
+            getRotor(i).set(setting.charAt(i - 1));
         }
     }
 
@@ -119,7 +117,7 @@ class Machine {
 
     /** Advance all rotors to their next position. */
     private void advanceRotors() {
-        boolean[] moving_rotors = new boolean[_UsedRotors.length];
+        moving_rotors = new boolean[_UsedRotors.length];
         moving_rotors[moving_rotors.length - 1] = true;
         for (int i = _UsedRotors.length - 2; i > 0; i--) {
             if (getRotor(i + 1).atNotch() && getRotor(i).rotates()){
@@ -136,9 +134,8 @@ class Machine {
     /** Return the result of applying the rotors to the character C (as an
      *  index in the range 0..alphabet size - 1). */
     private int applyRotors(int c) {
-        advanceRotors();
         int result = c;
-        for(int i = 0; i < _UsedRotors.length; i++) {
+        for(int i = _UsedRotors.length - 1; i > 0; i--) {
             result = getRotor(i).convertForward(result);
         }
         for(int i = 0; i < _UsedRotors.length; i++) {
@@ -153,7 +150,9 @@ class Machine {
         String msg_new = "";
         msg = msg.replace(" ", "");
         for(int i = 0; i < msg.length(); i++) {
-            msg_new += alphabet().toChar(convert(alphabet().toInt(msg.charAt(i))));
+            int msgToInt = alphabet().toInt(msg.charAt(i));
+            int converted = convert(msgToInt);
+            msg_new += alphabet().toChar(converted);
         }
         return msg_new;
     }
@@ -178,5 +177,8 @@ class Machine {
 
     /** Plugboard permutation */
     public Permutation _plugboard;
+
+    /** Boolean Array List of all rotrs that will advance. */
+    public boolean[] moving_rotors;
 
 }

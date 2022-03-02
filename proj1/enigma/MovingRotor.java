@@ -24,6 +24,9 @@ class MovingRotor extends Rotor {
     @Override
     void advance() {
         _setting += 1;
+        if (_setting == alphabet().size()) {
+            _setting = 0;
+        }
     }
     // ask in OH about this method
 
