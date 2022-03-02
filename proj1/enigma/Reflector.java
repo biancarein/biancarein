@@ -24,5 +24,5 @@ class Reflector extends FixedRotor {
             throw error("reflector has only one position");
         }
     }
-
+    // error check: permutation for reflector have to be a derrangement, if not throw an error
 }

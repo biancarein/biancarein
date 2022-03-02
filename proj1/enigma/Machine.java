@@ -36,6 +36,7 @@ class Machine {
     }
 
     /** Return the number pawls (and thus rotating rotors) I have. */
+    // how many moving rotors
     int numPawls() {
         return _pawls;
     }
@@ -118,8 +119,15 @@ class Machine {
 
     /** Advance all rotors to their next position. */
     private void advanceRotors() {
-        for (int i = 0; i < _UsedRotors.length; i++) {
-            if (getRotor(i).atNotch()){
+        boolean[] moving_rotors = new boolean[_UsedRotors.length];
+        moving_rotors[moving_rotors.length - 1] = true;
+        for (int i = _UsedRotors.length - 2; i > 0; i--) {
+            if (getRotor(i + 1).atNotch() && getRotor(i).rotates()){
+                moving_rotors[i] = true;
+            }
+        }
+        for (int i = 0; i < moving_rotors.length; i++) {
+            if(moving_rotors[i]) {
                 getRotor(i).advance();
             }
         }
@@ -142,9 +150,12 @@ class Machine {
     /** Returns the encoding/decoding of MSG, updating the state of
      *  the rotors accordingly. */
     String convert(String msg) {
-        // char at msg
-        // convert the char
-        return ""; // FIXME
+        String msg_new = "";
+        msg = msg.replace(" ", "");
+        for(int i = 0; i < msg.length(); i++) {
+            msg_new += alphabet().toChar(convert(alphabet().toInt(msg.charAt(i))));
+        }
+        return msg_new;
     }
 
     /** Common alphabet of my rotors. */
@@ -167,4 +178,5 @@ class Machine {
 
     /** Plugboard permutation */
     public Permutation _plugboard;
+
 }

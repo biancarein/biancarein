@@ -60,4 +60,7 @@ class Alphabet {
 
     /* list of characters from constructor */
     public String _chars;
+
+    // not in alphabet error
+    // duplicate error
 }
