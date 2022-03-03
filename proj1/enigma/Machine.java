@@ -117,10 +117,16 @@ class Machine {
 
     /** Advance all rotors to their next position. */
     private void advanceRotors() {
+        // timing case
         moving_rotors = new boolean[_UsedRotors.length];
         moving_rotors[moving_rotors.length - 1] = true;
         for (int i = _UsedRotors.length - 2; i > 0; i--) {
             if (getRotor(i + 1).atNotch() && getRotor(i).rotates()){
+                moving_rotors[i] = true;
+            }
+        }
+        for (int i = _UsedRotors.length - 2; i > 0; i--) {
+            if (getRotor(i).atNotch() && getRotor(i - 1).rotates()){
                 moving_rotors[i] = true;
             }
         }
