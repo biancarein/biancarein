@@ -83,19 +83,13 @@ public final class Main {
      *  file _config and apply it to the messages in _input, sending the
      *  results to _output. */
     private void process() {
-        // we need to process the .conf file to build out the machine
-            // call readConfig for this
-        // parse the .in file [need to be a for loop of some sort]
-            // use setUp to process each settings line of the .in file
-            // use printMessageLine to encrypt each message line of the .in file
-        // there can be multiple settings lines and messages in one .in file
-        readConfig();
-        // for loop through the .in file
-        // somehow grab the line
-        // call set up on that string line
+        Machine m = readConfig();
         while (_input.hasNextLine()) {
-            String str = _input.next();
-            printMessageLine(str);
+            if (_input.next().startsWith("*")) {
+                setUp(m, _input.nextLine());
+            } else {
+                printMessageLine(m.convert(_input.nextLine()));
+            }
         }
     }
 
@@ -108,7 +102,7 @@ public final class Main {
             int num_rotors = _config.nextInt();
             int num_pawls = _config.nextInt();
             Collection<Rotor> _allRotors = new HashSet<>();
-            while (_config.hasNext("^\\s[A-Za-z\\d]+")) {
+            while (_config.hasNext()) {
                 _allRotors.add(readRotor());
                 _config.next("^\\s[A-Za-z\\d]+");
             }
@@ -123,10 +117,7 @@ public final class Main {
         try {
             String rotor_name = _config.next();
             String notches = _config.next();
-            String real_notches = "";
-            for (int i = 1; i < notches.length(); i++) {
-                real_notches += notches.charAt(i);
-            }
+            String real_notches = notches.substring(1);
             String permutation = "";
             while (_config.hasNext("[^A-Za-z\\d|\\s][A-Z]+[^A-Za-z\\d|\\s]")) {
                 permutation += _config.next("[^A-Za-z\\d|\\s][A-Z]+[^A-Za-z\\d|\\s]");
@@ -153,20 +144,21 @@ public final class Main {
         if (settings.charAt(0) != '*') {
             throw error("Not a settings line");
         }
-        String[] s_line = settings.split(" ");
+        String[] s_line = settings.split("\\s+");
         String[] rotor_names = new String[M.numRotors()];
         String settings_line = s_line[M.numRotors() + 1];
         String p_line = "";
         for (int i = 1; i < M.numRotors() + 1; i++) {
             rotor_names[i] = s_line[i];
         }
-        for (int j = M.numRotors() + 2; j < s_line.length; j++) {
+        for (int j = M.numRotors() + 1; j < s_line.length; j++) {
             p_line += s_line[j];
         }
         Permutation p_perm = new Permutation(p_line, _alphabet);
         M.insertRotors(rotor_names);
         M.setRotors(settings_line);
         M.setPlugboard(p_perm);
+        System.out.println(s_line);
     }
 
     /** Return true iff verbose option specified. */
@@ -177,17 +169,19 @@ public final class Main {
     /** Print MSG in groups of five (except that the last group may
      *  have fewer letters). */
     private void printMessageLine(String msg) {
-
         for (int i = 0; i < msg.length(); i++) {
             _output.append(msg.charAt(i));
         }
-        // substring method and start and end index
         int div_five = msg.length() / 5;
+        int remainder = msg.length() % 5;
         for (int i = 0; i < div_five; i++) {
             for (int j = 0; j < 5; j++) {
                 _output.print(j);
             }
             _output.print(' ');
+        }
+        for (int h = 0; h < remainder; h++) {
+            _output.print(h);
         }
     }
 
