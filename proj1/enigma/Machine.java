@@ -34,7 +34,6 @@ class Machine {
     }
 
     /** Return the number pawls (and thus rotating rotors) I have. */
-    // how many moving rotors
     int numPawls() {
         return _pawls;
     }
@@ -45,7 +44,7 @@ class Machine {
     Rotor getRotor(int k) {
         _CopyAllRotors = _allRotors;
         Rotor curr = _CopyAllRotors.iterator().next();
-        for(Rotor rotor: _CopyAllRotors) {
+        for (Rotor rotor: _CopyAllRotors) {
             String name = rotor.name();
             if (_UsedRotors[k].equals(name)) {
                 curr = rotor;
@@ -64,9 +63,9 @@ class Machine {
     void insertRotors(String[] rotors) {
         _CopyAllRotors = _allRotors;
         for (int i = 0; i < numRotors(); i++) {
-            for(Rotor rotor: _CopyAllRotors) {
+            for (Rotor rotor: _CopyAllRotors) {
                 String name = rotor.name();
-                if(name.equals(rotors[i])){
+                if (name.equals(rotors[i])) {
                     _UsedRotors[i] = rotors[i];
                 }
             }
@@ -119,20 +118,20 @@ class Machine {
 
     /** Advance all rotors to their next position. */
     private void advanceRotors() {
-        moving_rotors = new boolean[_UsedRotors.length];
-        moving_rotors[moving_rotors.length - 1] = true;
+        movingRotors = new boolean[_UsedRotors.length];
+        movingRotors[movingRotors.length - 1] = true;
         for (int i = _UsedRotors.length - 2; i > 0; i--) {
-            if (getRotor(i + 1).atNotch() && getRotor(i).rotates()){
-                moving_rotors[i] = true;
+            if (getRotor(i + 1).atNotch() && getRotor(i).rotates()) {
+                movingRotors[i] = true;
             }
         }
         for (int i = _UsedRotors.length - 2; i > 0; i--) {
-            if (getRotor(i).atNotch() && getRotor(i - 1).rotates()){
-                moving_rotors[i] = true;
+            if (getRotor(i).atNotch() && getRotor(i - 1).rotates()) {
+                movingRotors[i] = true;
             }
         }
-        for (int i = 0; i < moving_rotors.length; i++) {
-            if(moving_rotors[i]) {
+        for (int i = 0; i < movingRotors.length; i++) {
+            if (movingRotors[i]) {
                 getRotor(i).advance();
             }
         }
@@ -142,10 +141,10 @@ class Machine {
      *  index in the range 0..alphabet size - 1). */
     private int applyRotors(int c) {
         int result = c;
-        for(int i = _UsedRotors.length - 1; i > 0; i--) {
+        for (int i = _UsedRotors.length - 1; i > 0; i--) {
             result = getRotor(i).convertForward(result);
         }
-        for(int i = 0; i < _UsedRotors.length; i++) {
+        for (int i = 0; i < _UsedRotors.length; i++) {
             result = getRotor(i).convertBackward(result);
         }
         return result;
@@ -154,39 +153,39 @@ class Machine {
     /** Returns the encoding/decoding of MSG, updating the state of
      *  the rotors accordingly. */
     String convert(String msg) {
-        String msg_new = "";
+        String msgNew = "";
         msg = msg.replaceAll("\\s+", "");
-        for(int i = 0; i < msg.length(); i++) {
+        for (int i = 0; i < msg.length(); i++) {
             char msgChar = msg.charAt(i);
             int msgToInt = alphabet().toInt(msgChar);
             int converted = convert(msgToInt);
-            msg_new += alphabet().toChar(converted);
+            msgNew += alphabet().toChar(converted);
         }
-        return msg_new;
+        return msgNew;
     }
 
     /** Common alphabet of my rotors. */
     private final Alphabet _alphabet;
 
     /** Number of Rotors. */
-    public int _numRotors;
+    private int _numRotors;
 
     /** Number of Pawls. */
-    public int _pawls;
+    private int _pawls;
 
     /** Collection of all Rotors. */
-    public Collection<Rotor> _allRotors;
+    private Collection<Rotor> _allRotors;
 
     /** Copy Collection of all Rotors. */
-    public Collection<Rotor> _CopyAllRotors;
+    private Collection<Rotor> _CopyAllRotors;
 
     /** Array List of all Rotors that will be used/inserted. */
-    public String[] _UsedRotors;
+    private String[] _UsedRotors;
 
-    /** Plugboard permutation */
-    public Permutation _plugboard;
+    /** Plugboard permutation. */
+    private Permutation _plugboard;
 
     /** Boolean Array List of all rotrs that will advance. */
-    public boolean[] moving_rotors;
+    private boolean[] movingRotors;
 
 }

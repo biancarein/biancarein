@@ -1,12 +1,7 @@
 package enigma;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
-import org.junit.Rule;
-import org.junit.rules.Timeout;
 import static org.junit.Assert.*;
-
-import java.util.HashMap;
 
 import static enigma.TestUtils.*;
 
@@ -30,20 +25,5 @@ public class AlphabetTest {
 
         assertEquals('B', test.toChar(1));
         assertEquals('A', test.toChar(0));
-    }
-
-    @Test
-    public void testMoreComplicated() {
-       String testString = "abcdefzyxw1092";
-       Alphabet ctest = new Alphabet(testString);
-       assertEquals(14, ctest.size());
-
-       for (int i = 0; i < testString.length(); i++) {
-           char curr = testString.charAt(i);
-           assertEquals(curr, ctest.toChar(i));
-           assertEquals(i, ctest.toInt(curr));
-           assertTrue(ctest.contains(curr));
-       }
-       assertFalse(ctest.contains('A'));
     }
 }

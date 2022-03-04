@@ -3,7 +3,7 @@ package enigma;
 import static enigma.EnigmaException.*;
 
 /** Superclass that represents a rotor in the enigma machine.
- *  @author
+ *  @author Bianca Rein Del Rosario
  */
 class Rotor {
 
@@ -109,6 +109,6 @@ class Rotor {
     private Permutation _permutation;
 
     /** My Setting.*/
-    public int _setting;
+    private int _setting;
 
 }

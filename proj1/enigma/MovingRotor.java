@@ -23,16 +23,16 @@ class MovingRotor extends Rotor {
 
     @Override
     void advance() {
-        _setting += 1;
-        if (_setting == alphabet().size()) {
-            _setting = 0;
+        set(setting() + 1);
+        if (setting() == alphabet().size()) {
+            set(0);
         }
     }
 
     @Override
     boolean atNotch() {
         for (int i = 0; i < notches().length(); i++) {
-            if (notches().charAt(i) == alphabet().toChar(setting())){
+            if (notches().charAt(i) == alphabet().toChar(setting())) {
                 return true;
             }
         }
@@ -45,6 +45,6 @@ class MovingRotor extends Rotor {
     }
 
     /** A String of my notches. */
-    public String _notches;
+    private String _notches;
 
 }

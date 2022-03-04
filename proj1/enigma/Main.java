@@ -4,15 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.Collection;
 
-import net.sf.saxon.pattern.SchemaNodeTest;
 import ucb.util.CommandArgs;
 
 import static enigma.EnigmaException.*;
 
 /** Enigma simulator.
- *  @author
+ *  @author Bianca Rein Del Rosario
  */
 public final class Main {
 
@@ -85,11 +88,11 @@ public final class Main {
     private void process() {
         Machine m = readConfig();
         while (_input.hasNextLine()) {
-            String next_line = _input.nextLine();
-            if (next_line.startsWith("*")) {
-                setUp(m, next_line);
+            String nextLine = _input.nextLine();
+            if (nextLine.startsWith("*")) {
+                setUp(m, nextLine);
             } else {
-                printMessageLine(m.convert(next_line));
+                printMessageLine(m.convert(nextLine));
             }
         }
     }
@@ -100,14 +103,14 @@ public final class Main {
         try {
             String alpha = _config.next();
             _alphabet = new Alphabet(alpha);
-            int num_rotors = _config.nextInt();
-            int num_pawls = _config.nextInt();
-            Collection<Rotor> _allRotors = new ArrayList<>();
+            int numRotors = _config.nextInt();
+            int numPawls = _config.nextInt();
+            Collection<Rotor> allRotors = new ArrayList<>();
             while (_config.hasNext()) {
-                _allRotors.add(readRotor());
+                allRotors.add(readRotor());
                 String temp = _config.nextLine();
             }
-            return new Machine(_alphabet, num_rotors, num_pawls, _allRotors);
+            return new Machine(_alphabet, numRotors, numPawls, allRotors);
         } catch (NoSuchElementException excp) {
             throw error("configuration file truncated");
         }
@@ -116,25 +119,26 @@ public final class Main {
     /** Return a rotor, reading its description from _config. */
     private Rotor readRotor() {
         try {
-            String rotor_name = _config.next();
+            String rotorName = _config.next();
             String type = _config.next();
             String notches = type.substring(1);
             String permutation = "";
-            while (_config.hasNext("[^A-Za-z\\d|\\s][A-Za-z\\d\\S]+[^A-Za-z\\d|\\s]")) {
+            String regex = "[^A-Za-z\\d|\\s][A-Za-z\\d\\S]+[^A-Za-z\\d|\\s]";
+            while (_config.hasNext(regex)) {
                 permutation += _config.next() + " ";
             }
             Permutation perm = new Permutation(permutation, _alphabet);
-            Rotor rotor_return;
+            Rotor rotorReturn;
             if (type.charAt(0) == 'M') {
-                rotor_return = new MovingRotor(rotor_name, perm, notches);
+                rotorReturn = new MovingRotor(rotorName, perm, notches);
             } else if (type.charAt(0) == 'N') {
-                rotor_return = new FixedRotor(rotor_name, perm);
-            } else if (type.charAt(0) == 'R'){
-                rotor_return = new Reflector(rotor_name, perm);
+                rotorReturn = new FixedRotor(rotorName, perm);
+            } else if (type.charAt(0) == 'R') {
+                rotorReturn = new Reflector(rotorName, perm);
             } else {
                 throw error("This type does not exist!");
             }
-            return rotor_return;
+            return rotorReturn;
         } catch (NoSuchElementException excp) {
             throw error("bad rotor description");
         }
@@ -146,20 +150,20 @@ public final class Main {
         if (settings.charAt(0) != '*') {
             throw error("Not a settings line!");
         }
-        String[] s_line = settings.split("\\s+");
-        String[] rotor_names = new String[M.numRotors()];
-        String settings_line = s_line[M.numRotors() + 1];
-        String p_line = "";
+        String[] sLine = settings.split("\\s+");
+        String[] rotorNames = new String[M.numRotors()];
+        String settingsLine = sLine[M.numRotors() + 1];
+        String pLine = "";
         for (int i = 1; i < M.numRotors() + 1; i++) {
-            rotor_names[i - 1] = s_line[i];
+            rotorNames[i - 1] = sLine[i];
         }
-        for (int j = M.numRotors() + 2; j < s_line.length; j++) {
-            p_line += s_line[j] + " ";
+        for (int j = M.numRotors() + 2; j < sLine.length; j++) {
+            pLine += sLine[j] + " ";
         }
-        Permutation p_perm = new Permutation(p_line, _alphabet);
-        M.insertRotors(rotor_names);
-        M.setRotors(settings_line);
-        M.setPlugboard(p_perm);
+        Permutation pPerm = new Permutation(pLine, _alphabet);
+        M.insertRotors(rotorNames);
+        M.setRotors(settingsLine);
+        M.setPlugboard(pPerm);
     }
 
     /** Return true iff verbose option specified. */
@@ -170,20 +174,20 @@ public final class Main {
     /** Print MSG in groups of five (except that the last group may
      *  have fewer letters). */
     private void printMessageLine(String msg) {
-        String msg_copy = msg;
-        String msg_new = "";
+        String msgCopy = msg;
+        String msgNew = "";
         int div = msg.length() / 5;
         for (int i = 0; i < div; i++) {
-            if (msg_copy.length() <= 5) {
-                msg_new += msg_copy.substring(0,5);
-                msg_copy = msg_copy.substring(5);
+            if (msgCopy.length() <= 5) {
+                msgNew += msgCopy.substring(0, 5);
+                msgCopy = msgCopy.substring(5);
             } else {
-                msg_new += msg_copy.substring(0,5) + " ";
-                msg_copy = msg_copy.substring(5);
+                msgNew += msgCopy.substring(0, 5) + " ";
+                msgCopy = msgCopy.substring(5);
             }
         }
-        msg_new += msg_copy;
-        _output.println(msg_new);
+        msgNew += msgCopy;
+        _output.println(msgNew);
     }
 
     /** Alphabet used in this machine. */

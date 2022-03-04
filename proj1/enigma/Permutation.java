@@ -23,7 +23,7 @@ class Permutation {
      *  c0c1...cm. */
     private void addCycle(String cycle) {
         String[] newCycleArr = new String[_cyclesArray.length + 1];
-        for (int i = 0; i < _cyclesArray.length; i++){
+        for (int i = 0; i < _cyclesArray.length; i++) {
             newCycleArr[i] = _cyclesArray[i];
         }
         newCycleArr[_cyclesArray.length] = cycle;
@@ -49,8 +49,8 @@ class Permutation {
     int permute(int p) {
         char currChar = alphabet().toChar(wrap(p));
         char permChar = alphabet().toChar(wrap(p));
-        for (int i = 0; i < _cyclesArray.length; i++){
-            for (int j = 0; j < _cyclesArray[i].length(); j++){
+        for (int i = 0; i < _cyclesArray.length; i++) {
+            for (int j = 0; j < _cyclesArray[i].length(); j++) {
                 if (currChar == _cyclesArray[i].charAt(j)) {
                     if (j == _cyclesArray[i].length() - 1) {
                         permChar = _cyclesArray[i].charAt(0);
@@ -68,11 +68,12 @@ class Permutation {
     int invert(int c) {
         char currChar = alphabet().toChar(wrap(c));
         char permChar = alphabet().toChar(wrap(c));
-        for (int i = 0; i < _cyclesArray.length; i++){
-            for (int j = 0; j < _cyclesArray[i].length(); j++){
+        for (int i = 0; i < _cyclesArray.length; i++) {
+            for (int j = 0; j < _cyclesArray[i].length(); j++) {
                 if (currChar == _cyclesArray[i].charAt(wrap(j))) {
                     if (j == 0) {
-                        permChar = _cyclesArray[i].charAt(_cyclesArray[i].length() - 1);
+                        int p = _cyclesArray[i].length() - 1;
+                        permChar = _cyclesArray[i].charAt(p);
                     } else {
                         permChar = _cyclesArray[i].charAt(j - 1);
                     }
@@ -110,7 +111,7 @@ class Permutation {
         char atElem = 0;
         for (int i = 0; i < alphabet().size(); i++) {
             atElem = alphabet().toChar(i);
-            if(atElem == permute(atElem)) {
+            if (atElem == permute(atElem)) {
                 return false;
             } else if (atElem == invert(atElem)) {
                 return false;
@@ -123,8 +124,8 @@ class Permutation {
     private Alphabet _alphabet;
 
     /** Cycles in array form. */
-    public String[] _cyclesArray;
+    private String[] _cyclesArray;
 
     /** Cycles in String form. */
-    public String _cyclesString;
+    private String _cyclesString;
 }

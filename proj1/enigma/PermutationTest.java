@@ -100,8 +100,8 @@ public class PermutationTest {
 
         Alphabet a3 = new Alphabet("AB");
         Permutation two = new Permutation("(BA)", a3);
-        assertEquals( 'B', two.invert('A'));
-        assertEquals( 'A', two.invert('B'));
+        assertEquals('B', two.invert('A'));
+        assertEquals('A', two.invert('B'));
     }
 
     @Test
@@ -120,19 +120,19 @@ public class PermutationTest {
     public void testPermuteChar() {
         Alphabet a1 = new Alphabet("ABCD");
         Permutation p = new Permutation("(BACD)", a1);
-        assertEquals( 'C', p.permute('A'));
+        assertEquals('C', p.permute('A'));
         assertEquals('A', p.permute('B'));
         assertEquals('D', p.permute('C'));
         assertEquals('B', p.permute('D'));
 
         Alphabet a2 = new Alphabet("B");
         Permutation single = new Permutation("(B)", a2);
-        assertEquals( 'B', single.permute('B'));
+        assertEquals('B', single.permute('B'));
 
         Alphabet a3 = new Alphabet("AB");
         Permutation two = new Permutation("(BA)", a3);
-        assertEquals( 'B', two.permute('A'));
-        assertEquals( 'A', two.permute('B'));
+        assertEquals('B', two.permute('A'));
+        assertEquals('A', two.permute('B'));
 
     }
 
@@ -140,38 +140,38 @@ public class PermutationTest {
     public void testPermuteInt() {
         Alphabet a1 = new Alphabet("ABCD");
         Permutation p = new Permutation("(BACD)", a1);
-        assertEquals( 2, p.permute(0));
+        assertEquals(2, p.permute(0));
         assertEquals(0, p.permute(1));
         assertEquals(3, p.permute(2));
         assertEquals(1, p.permute(3));
 
         Alphabet a2 = new Alphabet("B");
         Permutation single = new Permutation("(B)", a2);
-        assertEquals( 0, single.permute(0));
+        assertEquals(0, single.permute(0));
 
         Alphabet a3 = new Alphabet("AB");
         Permutation two = new Permutation("(BA)", a3);
-        assertEquals( 1, two.permute(0));
-        assertEquals( 0, two.permute(1));
+        assertEquals(1, two.permute(0));
+        assertEquals(0, two.permute(1));
     }
 
     @Test
     public void testInvertInt() {
         Alphabet a1 = new Alphabet("ABCD");
         Permutation p = new Permutation("(BACD)", a1);
-        assertEquals( 1, p.invert(0));
+        assertEquals(1, p.invert(0));
         assertEquals(3, p.invert(1));
         assertEquals(0, p.invert(2));
         assertEquals(2, p.invert(3));
 
         Alphabet a2 = new Alphabet("B");
         Permutation single = new Permutation("(B)", a2);
-        assertEquals( 0, single.invert(0));
+        assertEquals(0, single.invert(0));
 
         Alphabet a3 = new Alphabet("AB");
         Permutation two = new Permutation("(BA)", a3);
-        assertEquals( 1, two.invert(0));
-        assertEquals( 0, two.invert(1));
+        assertEquals(1, two.invert(0));
+        assertEquals(0, two.invert(1));
     }
 
     @Test(expected = EnigmaException.class)

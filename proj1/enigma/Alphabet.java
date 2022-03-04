@@ -4,7 +4,7 @@ import static enigma.EnigmaException.*;
 
 /** An alphabet of encodable characters.  Provides a mapping from characters
  *  to and from indices into the alphabet.
- *  @author
+ *  @author Bianca Rein Del Rosario
  */
 class Alphabet {
 
@@ -14,8 +14,8 @@ class Alphabet {
         _chars = chars;
         for (int i = 0; i < size(); i++) {
             for (int j = i + 1; j < size(); j++) {
-                if(_chars.charAt(i) == _chars.charAt(j)) {
-                    throw error( "A character is duplicated in alphabet");
+                if (_chars.charAt(i) == _chars.charAt(j)) {
+                    throw error("A character is duplicated in alphabet");
                 }
             }
         }
@@ -33,8 +33,8 @@ class Alphabet {
 
     /** Returns true if CH is in this alphabet. */
     boolean contains(char ch) {
-        for(int i = 0; i < _chars.length(); i++){
-            if(_chars.charAt(i) == ch) {
+        for (int i = 0; i < _chars.length(); i++) {
+            if (_chars.charAt(i) == ch) {
                 return true;
             }
         }
@@ -50,14 +50,14 @@ class Alphabet {
     /** Returns the index of character CH which must be in
      *  the alphabet. This is the inverse of toChar(). */
     int toInt(char ch) {
-        for (int i = 0; i < _chars.length(); i++){
-            if (_chars.charAt(i) == ch ) {
+        for (int i = 0; i < _chars.length(); i++) {
+            if (_chars.charAt(i) == ch) {
                 return i;
             }
         }
         return ' ';
     }
 
-    /** list of characters from constructor */
-    public String _chars;
+    /** list of characters from constructor. */
+    private String _chars;
 }
