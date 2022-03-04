@@ -216,4 +216,27 @@ public class PermutationTest {
         p.permute(4);
         p.permute('F');
     }
+
+    @Test
+    public void testMapSelf() {
+        Alphabet a1 = new Alphabet("ABCD");
+        Permutation p = new Permutation("(B) (A) (CD)", a1);
+        assertEquals('B', p.permute('B'));
+        assertEquals('A', p.permute('A'));
+
+        assertEquals('C', p.permute('D'));
+        assertEquals('D', p.permute('C'));
+
+        assertEquals('B', p.invert('B'));
+        assertEquals('A', p.invert('A'));
+
+        assertEquals('C', p.invert('D'));
+        assertEquals('D', p.invert('C'));
+
+        assertEquals(1, p.permute(1));
+        assertEquals(0, p.permute(0));
+
+        assertEquals(1, p.invert(1));
+        assertEquals(0, p.invert(0));
+    }
 }
