@@ -103,9 +103,9 @@ public final class Main {
             int num_rotors = _config.nextInt();
             int num_pawls = _config.nextInt();
             Collection<Rotor> _allRotors = new ArrayList<>();
-            while (_config.hasNextLine()) {
+            while (_config.hasNext()) {
                 _allRotors.add(readRotor());
-                _config.nextLine();
+                String temp = _config.nextLine();
             }
             return new Machine(_alphabet, num_rotors, num_pawls, _allRotors);
         } catch (NoSuchElementException excp) {
@@ -120,7 +120,7 @@ public final class Main {
             String type = _config.next();
             String notches = type.substring(1);
             String permutation = "";
-            while (_config.hasNext("[^A-Za-z\\d|\\s][A-Z]+[^A-Za-z\\d|\\s]")) {
+            while (_config.hasNext("[^A-Za-z\\d|\\s][A-Za-z\\d\\S]+[^A-Za-z\\d|\\s]")) {
                 permutation += _config.next() + " ";
             }
             Permutation perm = new Permutation(permutation, _alphabet);
@@ -154,7 +154,7 @@ public final class Main {
             rotor_names[i - 1] = s_line[i];
         }
         for (int j = M.numRotors() + 2; j < s_line.length; j++) {
-            p_line += s_line[j];
+            p_line += s_line[j] + " ";
         }
         Permutation p_perm = new Permutation(p_line, _alphabet);
         M.insertRotors(rotor_names);
@@ -174,8 +174,13 @@ public final class Main {
         String msg_new = "";
         int div = msg.length() / 5;
         for (int i = 0; i < div; i++) {
-            msg_new += msg_copy.substring(0,5) + " ";
-            msg_copy = msg_copy.substring(5);
+            if (msg_copy.length() <= 5) {
+                msg_new += msg_copy.substring(0,5);
+                msg_copy = msg_copy.substring(5);
+            } else {
+                msg_new += msg_copy.substring(0,5) + " ";
+                msg_copy = msg_copy.substring(5);
+            }
         }
         msg_new += msg_copy;
         _output.println(msg_new);

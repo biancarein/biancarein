@@ -205,6 +205,10 @@ public class PermutationTest {
 
         Permutation q = new Permutation("(BAC) (D)", a1);
         assertFalse(q.derangement());
+
+        Alphabet a2 = new Alphabet("012345");
+        Permutation p2 = new Permutation("(01) (23) (45)", a2);
+        assertTrue(p2.derangement());
     }
 
     @Test(expected = EnigmaException.class)
