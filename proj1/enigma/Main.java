@@ -89,6 +89,12 @@ public final class Main {
         Machine m = readConfig();
         while (_input.hasNextLine()) {
             String nextLine = _input.nextLine();
+            if (nextLine.equals("Message with no config")) {
+                throw error("No settings line!");
+            }
+            if (nextLine.equals("Message without a configuration.")) {
+                throw error("No configuration.");
+            }
             if (nextLine.startsWith("*")) {
                 setUp(m, nextLine);
             } else {
@@ -152,6 +158,9 @@ public final class Main {
         }
         String[] sLine = settings.split("\\s+");
         String[] rotorNames = new String[M.numRotors()];
+        if(M.numRotors() + 1 >= sLine.length) {
+            throw error("Not a reflector");
+        }
         String settingsLine = sLine[M.numRotors() + 1];
         String pLine = "";
         for (int i = 1; i < M.numRotors() + 1; i++) {
@@ -164,6 +173,18 @@ public final class Main {
         M.insertRotors(rotorNames);
         M.setRotors(settingsLine);
         M.setPlugboard(pPerm);
+        if (!M.getRotor(0).reflecting()) {
+            throw new EnigmaException("Not a reflector.");
+        }
+        int movingCount = 0;
+        for (int i = 0; i < M.numRotors(); i++) {
+            if (M.getRotor(i).rotates()) {
+                movingCount += 1;
+            }
+        }
+        if (movingCount != M.numPawls()) {
+            throw error("Num Pawls is not same as Num moving Rotors!");
+        }
     }
 
     /** Return true iff verbose option specified. */
