@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
+import net.sf.saxon.pattern.SchemaNodeTest;
 import ucb.util.CommandArgs;
 
 import static enigma.EnigmaException.*;
@@ -104,19 +103,16 @@ public final class Main {
      *  file _config. */
     private Machine readConfig() {
         try {
-            // error check
-            // FIXME
-            //helper method - in order to break down the parsing of the .conf file into individual parts
-            // parsing thorugh the entire .conf file
-            // you should call readRotor
-
-            // pull the alphabet, number of rotors, and number of pawls from the .conf file
-            // start to reach each rotor description
-                // this can be abstracted by calling readRotor for each rotor line in .conf file
-                // think about how you can use .hasNect or hasNextline to come up with a loop condition that allows you to call readRotor on every rotor description line
-            // return a new machine object containing all of the components that you just parsed from the .conf file
-            _alphabet = new Alphabet();
-            return new Machine(_alphabet, 2, 1, null);
+            String alpha = _config.next();
+            _alphabet = new Alphabet(alpha);
+            int num_rotors = _config.nextInt();
+            int num_pawls = _config.nextInt();
+            Collection<Rotor> _allRotors = new HashSet<>();
+            while (_config.hasNext("^\\s[A-Za-z\\d]+")) {
+                _allRotors.add(readRotor());
+                _config.next("^\\s[A-Za-z\\d]+");
+            }
+            return new Machine(_alphabet, num_rotors, num_pawls, _allRotors);
         } catch (NoSuchElementException excp) {
             throw error("configuration file truncated");
         }
@@ -125,9 +121,27 @@ public final class Main {
     /** Return a rotor, reading its description from _config. */
     private Rotor readRotor() {
         try {
-            return null; // FIXME
-            // helper method that was created in order to break down the parsing of the .conf file into individual parts
-            // designed to read one "rotor line" from the .conf file and return a rotor object with the specified cycles, notches, etcs.
+            String rotor_name = _config.next();
+            String notches = _config.next();
+            String real_notches = "";
+            for (int i = 1; i < notches.length(); i++) {
+                real_notches += notches.charAt(i);
+            }
+            String permutation = "";
+            while (_config.hasNext("[^A-Za-z\\d|\\s][A-Z]+[^A-Za-z\\d|\\s]")) {
+                permutation += _config.next("[^A-Za-z\\d|\\s][A-Z]+[^A-Za-z\\d|\\s]");
+                _config.next();
+            }
+            Permutation perm = new Permutation(permutation, _alphabet);
+            Rotor rotor_return;
+            if (notches.charAt(0) == 'M') {
+                rotor_return = new MovingRotor(rotor_name, perm, real_notches);
+            } else if (notches.charAt(0) == 'N') {
+                rotor_return = new FixedRotor(rotor_name, perm);
+            } else {
+                rotor_return = new Reflector(rotor_name, perm);
+            }
+            return rotor_return;
         } catch (NoSuchElementException excp) {
             throw error("bad rotor description");
         }
@@ -136,9 +150,23 @@ public final class Main {
     /** Set M according to the specification given on SETTINGS,
      *  which must have the format specified in the assignment. */
     private void setUp(Machine M, String settings) {
-        // FIXME
-        // designed to parse through the .in file
-        // set up a machine object that we created in readconfig with the settings line in .in file
+        if (settings.charAt(0) != '*') {
+            throw error("Not a settings line");
+        }
+        String[] s_line = settings.split(" ");
+        String[] rotor_names = new String[M.numRotors()];
+        String settings_line = s_line[M.numRotors() + 1];
+        String p_line = "";
+        for (int i = 1; i < M.numRotors() + 1; i++) {
+            rotor_names[i] = s_line[i];
+        }
+        for (int j = M.numRotors() + 2; j < s_line.length; j++) {
+            p_line += s_line[j];
+        }
+        Permutation p_perm = new Permutation(p_line, _alphabet);
+        M.insertRotors(rotor_names);
+        M.setRotors(settings_line);
+        M.setPlugboard(p_perm);
     }
 
     /** Return true iff verbose option specified. */
@@ -149,16 +177,18 @@ public final class Main {
     /** Print MSG in groups of five (except that the last group may
      *  have fewer letters). */
     private void printMessageLine(String msg) {
-        // FIXME
-        // designed to parse through the .in file
-        String msg_new = "";
-        for (int i = 0; i < msg.length(); i++) {
 
+        for (int i = 0; i < msg.length(); i++) {
+            _output.append(msg.charAt(i));
         }
-        // for each line of message input in .in file
-        // encrypt the line
-        // store it in the _output printstream variable
-        // look at Printstream API for methods that you can use to print something to the _output PrintStream
+        // substring method and start and end index
+        int div_five = msg.length() / 5;
+        for (int i = 0; i < div_five; i++) {
+            for (int j = 0; j < 5; j++) {
+                _output.print(j);
+            }
+            _output.print(' ');
+        }
     }
 
     /** Alphabet used in this machine. */
@@ -166,22 +196,13 @@ public final class Main {
 
     /** Source of input messages. */
     private Scanner _input;
-    // traverses the .in file that was passed into the program
-    // what we want to encrypt
 
     /** Source of machine configuration. */
     private Scanner _config;
-    // traverses the .conf file that was passed into the program
-    // the settings and info of the enigma machine
 
     /** File for encoded/decoded messages. */
     private PrintStream _output;
-    // represents the cursor in the .out file, which can be written to
-    // the file of the encrypted message
 
     /** True if --verbose specified. */
     private static boolean _verbose;
-
-    // use scanner objects to parse through the .conf and .in files
-    // methods suchs as .next .hasnext and .nextline
 }
