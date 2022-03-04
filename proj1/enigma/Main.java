@@ -121,7 +121,7 @@ public final class Main {
             String notches = type.substring(1);
             String permutation = "";
             while (_config.hasNext("[^A-Za-z\\d|\\s][A-Z]+[^A-Za-z\\d|\\s]")) {
-                permutation += _config.next();
+                permutation += _config.next() + " ";
             }
             Permutation perm = new Permutation(permutation, _alphabet);
             Rotor rotor_return;
@@ -129,8 +129,10 @@ public final class Main {
                 rotor_return = new MovingRotor(rotor_name, perm, notches);
             } else if (type.charAt(0) == 'N') {
                 rotor_return = new FixedRotor(rotor_name, perm);
-            } else {
+            } else if (type.charAt(0) == 'R'){
                 rotor_return = new Reflector(rotor_name, perm);
+            } else {
+                throw error("This type does not exist!");
             }
             return rotor_return;
         } catch (NoSuchElementException excp) {
