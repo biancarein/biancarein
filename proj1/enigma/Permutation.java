@@ -1,5 +1,7 @@
 package enigma;
 
+import static enigma.EnigmaException.*;
+
 /** Represents a permutation of a range of integers starting at 0 corresponding
  *  to the characters of an alphabet.
  *  @author Bianca Rein Del Rosario
@@ -14,7 +16,7 @@ class Permutation {
     Permutation(String cycles, Alphabet alphabet) {
         _alphabet = alphabet;
         _cyclesString = cycles.replace("(", "").replace(")", "");
-        _cyclesArray = _cyclesString.split(" ");
+        _cyclesArray = _cyclesString.split("\\s+");
     }
 
     /** Add the cycle c0->c1->...->cm->c0 to the permutation, where CYCLE is
@@ -83,11 +85,17 @@ class Permutation {
     /** Return the result of applying this permutation to the index of P
      *  in ALPHABET, and converting the result to a character of ALPHABET. */
     char permute(char p) {
+        if (!alphabet().contains(p)) {
+            throw error("Character not in alphabet.");
+        }
         return alphabet().toChar(permute(alphabet().toInt(p)));
     }
 
     /** Return the result of applying the inverse of this permutation to C. */
     char invert(char c) {
+        if (!alphabet().contains(c)) {
+            throw error("Character not in alphabet.");
+        }
         return alphabet().toChar(invert(alphabet().toInt(c)));
     }
 
@@ -119,6 +127,4 @@ class Permutation {
 
     /** Cycles in String form. */
     public String _cyclesString;
-
-    // throw error for not in alphabet
 }

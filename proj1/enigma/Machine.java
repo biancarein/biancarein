@@ -46,7 +46,8 @@ class Machine {
         _CopyAllRotors = _allRotors;
         Rotor curr = _CopyAllRotors.iterator().next();
         for(Rotor rotor: _CopyAllRotors) {
-            if (_UsedRotors[k] == rotor.name()) {
+            String name = rotor.name();
+            if (_UsedRotors[k].equals(name)) {
                 curr = rotor;
             }
         }
@@ -62,9 +63,10 @@ class Machine {
      *  Initially, all rotors are set at their 0 setting. */
     void insertRotors(String[] rotors) {
         _CopyAllRotors = _allRotors;
-        for (int i = 0; i < _UsedRotors.length; i++) {
+        for (int i = 0; i < numRotors(); i++) {
             for(Rotor rotor: _CopyAllRotors) {
-                if(rotor.name() == rotors[i]){
+                String name = rotor.name();
+                if(name.equals(rotors[i])){
                     _UsedRotors[i] = rotors[i];
                 }
             }
@@ -75,7 +77,7 @@ class Machine {
      *  numRotors()-1 characters in my alphabet. The first letter refers
      *  to the leftmost rotor setting (not counting the reflector).  */
     void setRotors(String setting) {
-        for (int i = 1; i <= _UsedRotors.length - 1; i++) {
+        for (int i = 1; i < _UsedRotors.length; i++) {
             getRotor(i).set(setting.charAt(i - 1));
         }
     }
@@ -117,7 +119,6 @@ class Machine {
 
     /** Advance all rotors to their next position. */
     private void advanceRotors() {
-        // timing case
         moving_rotors = new boolean[_UsedRotors.length];
         moving_rotors[moving_rotors.length - 1] = true;
         for (int i = _UsedRotors.length - 2; i > 0; i--) {
@@ -154,6 +155,7 @@ class Machine {
      *  the rotors accordingly. */
     String convert(String msg) {
         String msg_new = "";
+        msg = msg.replaceAll("\\s+", "");
         for(int i = 0; i < msg.length(); i++) {
             char msgChar = msg.charAt(i);
             int msgToInt = alphabet().toInt(msgChar);

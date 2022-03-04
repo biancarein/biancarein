@@ -28,7 +28,6 @@ class MovingRotor extends Rotor {
             _setting = 0;
         }
     }
-    // ask in OH about this method
 
     @Override
     boolean atNotch() {

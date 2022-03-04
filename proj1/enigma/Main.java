@@ -102,7 +102,7 @@ public final class Main {
             _alphabet = new Alphabet(alpha);
             int num_rotors = _config.nextInt();
             int num_pawls = _config.nextInt();
-            Collection<Rotor> _allRotors = new HashSet<>();
+            Collection<Rotor> _allRotors = new ArrayList<>();
             while (_config.hasNextLine()) {
                 _allRotors.add(readRotor());
                 _config.nextLine();

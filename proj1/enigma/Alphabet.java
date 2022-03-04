@@ -55,9 +55,9 @@ class Alphabet {
                 return i;
             }
         }
-        return 0;
+        return ' ';
     }
 
-    /* list of characters from constructor */
+    /** list of characters from constructor */
     public String _chars;
 }
