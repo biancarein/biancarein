@@ -154,9 +154,9 @@ class Machine {
      *  the rotors accordingly. */
     String convert(String msg) {
         String msg_new = "";
-        msg = msg.replace(" ", "");
         for(int i = 0; i < msg.length(); i++) {
-            int msgToInt = alphabet().toInt(msg.charAt(i));
+            char msgChar = msg.charAt(i);
+            int msgToInt = alphabet().toInt(msgChar);
             int converted = convert(msgToInt);
             msg_new += alphabet().toChar(converted);
         }

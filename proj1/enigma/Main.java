@@ -85,10 +85,11 @@ public final class Main {
     private void process() {
         Machine m = readConfig();
         while (_input.hasNextLine()) {
-            if (_input.next().startsWith("*")) {
-                setUp(m, _input.nextLine());
+            String next_line = _input.nextLine();
+            if (next_line.startsWith("*")) {
+                setUp(m, next_line);
             } else {
-                printMessageLine(m.convert(_input.nextLine()));
+                printMessageLine(m.convert(next_line));
             }
         }
     }
@@ -102,9 +103,9 @@ public final class Main {
             int num_rotors = _config.nextInt();
             int num_pawls = _config.nextInt();
             Collection<Rotor> _allRotors = new HashSet<>();
-            while (_config.hasNext()) {
+            while (_config.hasNextLine()) {
                 _allRotors.add(readRotor());
-                _config.next("^\\s[A-Za-z\\d]+");
+                _config.nextLine();
             }
             return new Machine(_alphabet, num_rotors, num_pawls, _allRotors);
         } catch (NoSuchElementException excp) {
@@ -116,18 +117,17 @@ public final class Main {
     private Rotor readRotor() {
         try {
             String rotor_name = _config.next();
-            String notches = _config.next();
-            String real_notches = notches.substring(1);
+            String type = _config.next();
+            String notches = type.substring(1);
             String permutation = "";
             while (_config.hasNext("[^A-Za-z\\d|\\s][A-Z]+[^A-Za-z\\d|\\s]")) {
-                permutation += _config.next("[^A-Za-z\\d|\\s][A-Z]+[^A-Za-z\\d|\\s]");
-                _config.next();
+                permutation += _config.next();
             }
             Permutation perm = new Permutation(permutation, _alphabet);
             Rotor rotor_return;
-            if (notches.charAt(0) == 'M') {
-                rotor_return = new MovingRotor(rotor_name, perm, real_notches);
-            } else if (notches.charAt(0) == 'N') {
+            if (type.charAt(0) == 'M') {
+                rotor_return = new MovingRotor(rotor_name, perm, notches);
+            } else if (type.charAt(0) == 'N') {
                 rotor_return = new FixedRotor(rotor_name, perm);
             } else {
                 rotor_return = new Reflector(rotor_name, perm);
@@ -142,23 +142,22 @@ public final class Main {
      *  which must have the format specified in the assignment. */
     private void setUp(Machine M, String settings) {
         if (settings.charAt(0) != '*') {
-            throw error("Not a settings line");
+            throw error("Not a settings line!");
         }
         String[] s_line = settings.split("\\s+");
         String[] rotor_names = new String[M.numRotors()];
         String settings_line = s_line[M.numRotors() + 1];
         String p_line = "";
         for (int i = 1; i < M.numRotors() + 1; i++) {
-            rotor_names[i] = s_line[i];
+            rotor_names[i - 1] = s_line[i];
         }
-        for (int j = M.numRotors() + 1; j < s_line.length; j++) {
+        for (int j = M.numRotors() + 2; j < s_line.length; j++) {
             p_line += s_line[j];
         }
         Permutation p_perm = new Permutation(p_line, _alphabet);
         M.insertRotors(rotor_names);
         M.setRotors(settings_line);
         M.setPlugboard(p_perm);
-        System.out.println(s_line);
     }
 
     /** Return true iff verbose option specified. */
@@ -169,20 +168,15 @@ public final class Main {
     /** Print MSG in groups of five (except that the last group may
      *  have fewer letters). */
     private void printMessageLine(String msg) {
-        for (int i = 0; i < msg.length(); i++) {
-            _output.append(msg.charAt(i));
+        String msg_copy = msg;
+        String msg_new = "";
+        int div = msg.length() / 5;
+        for (int i = 0; i < div; i++) {
+            msg_new += msg_copy.substring(0,5) + " ";
+            msg_copy = msg_copy.substring(5);
         }
-        int div_five = msg.length() / 5;
-        int remainder = msg.length() % 5;
-        for (int i = 0; i < div_five; i++) {
-            for (int j = 0; j < 5; j++) {
-                _output.print(j);
-            }
-            _output.print(' ');
-        }
-        for (int h = 0; h < remainder; h++) {
-            _output.print(h);
-        }
+        msg_new += msg_copy;
+        _output.println(msg_new);
     }
 
     /** Alphabet used in this machine. */
