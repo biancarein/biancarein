@@ -129,9 +129,12 @@ public final class Main {
             String type = _config.next();
             String notches = type.substring(1);
             String permutation = "";
-            String regex = "[^A-Za-z\\d|\\s][A-Za-z\\d\\S]+[^A-Za-z\\d|\\s]";
+            String regex = "[^A-Za-z\\d|\\s][A-Za-z\\d\\S]+";
             while (_config.hasNext(regex)) {
                 permutation += _config.next() + " ";
+            }
+            if (permutation.charAt(permutation.length()-2) != ')') {
+                throw error("bad config");
             }
             Permutation perm = new Permutation(permutation, _alphabet);
             Rotor rotorReturn;
