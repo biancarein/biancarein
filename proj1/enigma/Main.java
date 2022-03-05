@@ -158,7 +158,7 @@ public final class Main {
         }
         String[] sLine = settings.split("\\s+");
         String[] rotorNames = new String[M.numRotors()];
-        if(M.numRotors() + 1 >= sLine.length) {
+        if (M.numRotors() + 1 >= sLine.length) {
             throw error("Not a reflector");
         }
         String settingsLine = sLine[M.numRotors() + 1];

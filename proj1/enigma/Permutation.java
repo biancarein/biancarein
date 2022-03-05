@@ -15,7 +15,7 @@ class Permutation {
      *  Whitespace is ignored. */
     Permutation(String cycles, Alphabet alphabet) {
         _alphabet = alphabet;
-        _cyclesString = cycles.replace("(", "").replace(")", "");
+        _cyclesString = cycles.replace("(", "").replace(")", " ");
         _cyclesArray = _cyclesString.split("\\s+");
     }
 
